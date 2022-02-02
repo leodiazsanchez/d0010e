@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Observable;
@@ -13,8 +14,6 @@ import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import lab2.Driver;
 
 public class LevelGUI implements Observer {
 
@@ -30,7 +29,7 @@ public class LevelGUI implements Observer {
 
 		// TODO: You should change 200 to a value
 		// depending on the size of the level
-		d = new Display(lv,200,200);
+		d = new Display(lv, lv.windowX, lv.windowY);
 
 		frame.getContentPane().add(d);
 		frame.pack();
@@ -50,26 +49,26 @@ public class LevelGUI implements Observer {
 
 			addKeyListener(new Listener());
 			setBackground(Color.WHITE);
-			setPreferredSize(new Dimension(x + 20, y + 20));
+			setPreferredSize(new Dimension(x, y));
 			setFocusable(true);
 		}
 
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			drawRooms(g);
-
 		}
 
 		private void drawRooms(Graphics g) {
-			for (Room room : Driver.rooms) {
+			for (Room room : lv.rooms) {
 				g.setColor(room.color);
 				g.fillRect(room.x, room.y, room.dx, room.dy);
-				if(room.isActive) {
+				if (room == lv.currentRoom) {
 					g.setColor(Color.RED);
 					g.drawRect(room.x, room.y, room.dx, room.dy);
 				}
 			}
 		}
+
 
 		private class Listener implements KeyListener {
 
@@ -81,26 +80,26 @@ public class LevelGUI implements Observer {
 
 			public void keyTyped(KeyEvent event) {
 				switch (event.getKeyChar()) {
-					case 'w':
-						if(lv.currentRoom.north != null) {
-							lv.newRoom(lv.currentRoom.north);
-						}
-						break;
-					case 'a':
-						if(lv.currentRoom.west != null) {
-							lv.newRoom(lv.currentRoom.west);
-						}
-						break;
-					case 's':
-						if(lv.currentRoom.south != null) {
-							lv.newRoom(lv.currentRoom.south);
-						}
-						break;
-					case 'd':
-						if(lv.currentRoom.east != null) {
-							lv.newRoom(lv.currentRoom.east);
-						}
-						break;
+				case 'w':
+					if (lv.currentRoom.north != null) {
+						lv.newRoom(lv.currentRoom.north);
+					}
+					break;
+				case 'a':
+					if (lv.currentRoom.west != null) {
+						lv.newRoom(lv.currentRoom.west);
+					}
+					break;
+				case 's':
+					if (lv.currentRoom.south != null) {
+						lv.newRoom(lv.currentRoom.south);
+					}
+					break;
+				case 'd':
+					if (lv.currentRoom.east != null) {
+						lv.newRoom(lv.currentRoom.east);
+					}
+					break;
 				}
 			}
 		}
