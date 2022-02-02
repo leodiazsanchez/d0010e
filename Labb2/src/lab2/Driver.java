@@ -1,7 +1,6 @@
 package lab2;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import lab2.level.Level;
 import lab2.level.LevelGUI;
