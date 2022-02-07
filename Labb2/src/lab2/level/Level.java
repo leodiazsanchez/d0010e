@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Observable;
 
-
 public class Level extends Observable {
 
 	ArrayList<Room> rooms = new ArrayList<>();
@@ -13,7 +12,6 @@ public class Level extends Observable {
 	boolean locationSet = false;
 	int windowX;
 	int windowY;
-	
 
 	public boolean place(Room r, int x, int y) {
 		if (locationSet == true) {
@@ -37,18 +35,18 @@ public class Level extends Observable {
 		}
 	}
 
-	 public void firstLocation(Room r) {
+	public void firstLocation(Room r) {
 		mapSize();
 		currentRoom = r;
 		locationSet = true;
 	}
-	
-	void newRoom(Room r) {
+
+	void changeCurrentRoom(Room r) {
 		currentRoom = r;
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	private void mapSize() {
 		double x = 0.0, y = 0.0;
 		for (Room room : rooms) {
@@ -56,8 +54,8 @@ public class Level extends Observable {
 			x = rectangle.getMaxX();
 			y = rectangle.getMaxY();
 		}
-		windowX = (int)x;
-		windowY = (int)y;
+		windowX = (int) x;
+		windowY = (int) y;
 	}
 
 }

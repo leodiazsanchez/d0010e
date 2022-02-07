@@ -54,6 +54,7 @@ public class LevelGUI implements Observer {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			drawRooms(g);
+			drawRoomConnections(g);
 		}
 
 		private void drawRooms(Graphics g) {
@@ -64,9 +65,35 @@ public class LevelGUI implements Observer {
 					g.setColor(Color.RED);
 					g.drawRect(room.x, room.y, room.dx, room.dy);
 				}
+
 			}
 		}
 
+		private void drawRoomConnections(Graphics g) {
+			for (Room room : lv.rooms) {
+				g.setColor(Color.WHITE);
+				int size = 10;
+				if (room.north != null && room == lv.currentRoom) {
+					g.fillOval((room.x + room.dx / 2) - size, room.y, size, size);
+					g.drawOval((room.north.x + room.north.dx / 2) - size, room.north.y, size, size);
+				}
+				if (room.east != null && room == lv.currentRoom) {
+					g.fillOval((room.x + room.dx) - size, (room.y + room.dy / 2) - size, size, size);
+					g.drawOval((room.east.x + room.east.dx) - size, (room.east.y + room.east.dy / 2) - size, size,
+							size);
+				}
+				if (room.west != null && room == lv.currentRoom) {
+					g.fillOval((room.x), (room.y + room.dy / 2) - size, size, size);
+					g.drawOval((room.west.x), (room.west.y + room.west.dy / 2) - size, size, size);
+				}
+				if (room.south != null && room == lv.currentRoom) {
+					g.fillOval((room.x + room.dx / 2) - size, room.y + room.dy - size, size, size);
+					g.drawOval((room.south.x + room.south.dx / 2) - size, room.south.y + room.south.dy - size, size,
+							size);
+				}
+
+			}
+		}
 
 		private class Listener implements KeyListener {
 
@@ -80,22 +107,22 @@ public class LevelGUI implements Observer {
 				switch (event.getKeyChar()) {
 				case 'w':
 					if (lv.currentRoom.north != null) {
-						lv.newRoom(lv.currentRoom.north);
+						lv.changeCurrentRoom(lv.currentRoom.north);
 					}
 					break;
 				case 'a':
 					if (lv.currentRoom.west != null) {
-						lv.newRoom(lv.currentRoom.west);
+						lv.changeCurrentRoom(lv.currentRoom.west);
 					}
 					break;
 				case 's':
 					if (lv.currentRoom.south != null) {
-						lv.newRoom(lv.currentRoom.south);
+						lv.changeCurrentRoom(lv.currentRoom.south);
 					}
 					break;
 				case 'd':
 					if (lv.currentRoom.east != null) {
-						lv.newRoom(lv.currentRoom.east);
+						lv.changeCurrentRoom(lv.currentRoom.east);
 					}
 					break;
 				}
