@@ -33,9 +33,4 @@ public class Room {
 	public void connectWestTo(Room r) {
 		west = r;
 	}
-
-	public String toString() {
-		return "The rooms properties are: x = " + x + ", y = " + y + " width = " + dx + ", height = " + dy + "Color = "
-				+ color;
-	}
 }

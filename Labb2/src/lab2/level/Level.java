@@ -19,8 +19,10 @@ public class Level extends Observable {
 			r.y = y;
 
 			for (Room room : rooms) {
-				Point l1 = new Point(r.x, r.y);
-				Point r1 = new Point(r.x + r.dx, r.y - r.dx);
+				// l1 = TopLeft 1, r1 = BotRight 1
+				// l2 = TopLeft 1, r2 = BotRight 2
+				Point l1 = new Point(x, y);
+				Point r1 = new Point(x + r.dx, y - r.dx);
 				Point l2 = new Point(room.x, room.y);
 				Point r2 = new Point(room.x + room.dx, room.y - room.dx);
 				if (overlap(l1, r1, l2, r2)) {
@@ -36,29 +38,21 @@ public class Level extends Observable {
 
 	private boolean overlap(Point l1, Point r1, Point l2, Point r2) {
 
-		// To check if either rectangle is actually a line
-		// For example : l1 ={-1,0} r1={1,1} l2={0,-1} r2={0,1}
-
-		if (l1.x == r1.x || l1.y == r1.y || l2.x == r2.x || l2.y == r2.y) {
-			// the line cannot have positive overlap
-			return false;
-		}
-
-		// If one rectangle is on left side of other
+		// if one rectangle is on left side of other
 		if (l1.x >= r2.x || l2.x >= r1.x) {
 			return false;
 		}
 
-		// If one rectangle is above other
+		// if one rectangle is above other
 		if (r1.y >= l2.y || r2.y >= l1.y) {
 			return false;
 		}
 
 		return true;
 	}
-	
-	private class Point {
-		int x, y;
+
+	 class Point {
+		private int x, y;
 
 		public Point(int x, int y) {
 			this.x = x;
@@ -71,34 +65,39 @@ public class Level extends Observable {
 			currentRoom = r;
 			locationSet = true;
 		}
-
 	}
 
-	void move(char c) {
-		switch (c) {
-		case 'w':
-			if (currentRoom.north != null) {
-				currentRoom = currentRoom.north;
-			}
-			break;
-		case 'a':
-			if (currentRoom.west != null) {
-				currentRoom = currentRoom.west;
-			}
-			break;
-		case 's':
-			if (currentRoom.south != null) {
-				currentRoom = currentRoom.south;
-			}
-			break;
-		case 'd':
-			if (currentRoom.east != null) {
-				currentRoom = currentRoom.east;
-			}
-			break;
+	void moveNorth() {
+		if (currentRoom.north != null) {
+			currentRoom = currentRoom.north;
+			setChanged();
+			notifyObservers();
 		}
-		setChanged();
-		notifyObservers();
+	}
+
+	void moveSouth() {
+		if (currentRoom.south != null) {
+			currentRoom = currentRoom.south;
+			setChanged();
+			notifyObservers();
+		}
+	}
+
+	void moveEast() {
+		if (currentRoom.east != null) {
+			currentRoom = currentRoom.east;
+			setChanged();
+			notifyObservers();
+		}
+	}
+
+	void moveWest() {
+		if (currentRoom.west != null) {
+			currentRoom = currentRoom.west;
+			setChanged();
+			notifyObservers();
+		}
+
 	}
 
 }

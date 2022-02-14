@@ -103,16 +103,16 @@ public class LevelGUI implements Observer {
 			public void keyTyped(KeyEvent event) {
 				switch (event.getKeyChar()) {
 				case 'w':
-					lv.move('w');
+					lv.moveNorth();
 					break;
 				case 'a':
-					lv.move('a');
+					lv.moveWest();
 					break;
 				case 's':
-					lv.move('s');
+					lv.moveSouth();
 					break;
 				case 'd':
-					lv.move('d');
+					lv.moveEast();
 					break;
 				}
 			}
