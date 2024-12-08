@@ -17,17 +17,9 @@ public class GameGrid extends Observable {
 	 * value for if the space is empty
 	 */
 	public static final int EMPTY = 0;
-	/**
-	 * value for if the space is occupied by the player ME
-	 */
-	public static final int ME = 1;
-	/**
-	 * value for if the space is occupied by the player OTHER
-	 */
-	public static final int OTHER = 2;
 	private static final int INROW = 3;
 	private int size;
-	private int[][] boards;
+	private int[][] board;
 
 	/**
 	 * Constructor
@@ -36,7 +28,7 @@ public class GameGrid extends Observable {
 	 */
 	public GameGrid(int size) {
 		this.size = size;
-		this.boards = new int[this.size][this.size];
+		this.board = new int[this.size][this.size];
 		clearGrid();
 
 	}
@@ -49,7 +41,7 @@ public class GameGrid extends Observable {
 	 * @return the value of the specified location
 	 */
 	public int getLocation(int x, int y) {
-		return boards[x][y];
+		return board[x][y];
 	}
 
 	/**
@@ -71,8 +63,8 @@ public class GameGrid extends Observable {
 	 */
 	public boolean move(int x, int y, int player) {
 		try {
-			if (boards[x][y] == 0) {
-				boards[x][y] = player;
+			if (board[x][y] == 0) {
+				board[x][y] = player;
 				setChanged();
 				notifyObservers();
 				return true;
@@ -88,10 +80,10 @@ public class GameGrid extends Observable {
 	 * Clears the grid of pieces
 	 */
 	public void clearGrid() {
-		for (int i = 0; i < boards.length; i++) {
+		for (int i = 0; i < board.length; i++) {
 
-			for (int j = 0; j < boards.length; j++) {
-				boards[i][j] = EMPTY;
+			for (int j = 0; j < board.length; j++) {
+				board[i][j] = EMPTY;
 			}
 		}
 		setChanged();
@@ -105,80 +97,52 @@ public class GameGrid extends Observable {
 	 * @return true if player has 5 in row, false otherwise
 	 */
 	public boolean isWinner(int player) {
-		int otherplayer = ME;
-		switch (player) {
-		case ME:
-			otherplayer = OTHER;
-			break;
-		case OTHER:
-			otherplayer = ME;
-			break;
-		}
-		for (int i = 0; i < boards.length; i++) {
-			for (int j = 0; j < boards.length; j++) {
-				for (int counter = 0; counter <= INROW; counter++) {
-					// Test Rows
-					if (boards.length <= counter + j) {
-						break;
-					}
-					if (boards[i][counter + j] == EMPTY || boards[i][counter + j] == otherplayer) {
-						break;
-					}
-					if (counter == INROW - 1) {
-						return true;
-					}
-				}
-			}
-		}
-		for (int i = 0; i < boards.length; i++) {
-			for (int j = 0; j < boards.length; j++) {
-				for (int counter = 0; counter <= INROW; counter++) {
-					// Test Columns
-					if (boards.length <= counter + i) {
-						break;
-					}
-					if (boards[counter + i][j] == EMPTY || boards[counter + i][j] == otherplayer) {
-						break;
-					}
-					if (counter == INROW - 1) {
-						return true;
-					}
-				}
-			}
-		}
-		for (int i = 0; i < boards.length; i++) {
-			for (int j = 0; j < boards.length; j++) {
-				for (int counter = 0; counter <= INROW; counter++) {
-					// Test NW Diagonal
-					if (boards.length <= counter + i || boards.length <= counter + j) {
-						break;
-					}
-					if (boards[counter + i][counter + j] == EMPTY || boards[counter + i][counter + j] == otherplayer) {
-						break;
-					}
-					if (counter == INROW - 1) {
-						return true;
+		
+		  for (int i = 0; i < board.length; i++) {
+		        for (int j = 0; j < board[i].length; j++) {
+		        	
+		            // Skip cells that don't contain the player's piece
+		            if (board[i][j] != player) {
+		                continue;
+		            }
 
-					}
-				}
-			}
-		}
-		for (int i = 0; i < boards.length; i++) {
-			for (int j = 0; j < boards.length; j++) {
-				for (int counter = 0; counter <= INROW; counter++) {
-					if(i - counter < 0 || boards.length <= counter + j){
-						break;
-					}
-					if (boards[i - counter][counter + j] == EMPTY || boards[i - counter][counter + j] == otherplayer) {
-						break;
+		            // Check all 8 directions around the current cell
+		            for (int dx = -1; dx <= 1; dx++) {
+		                for (int dy = -1; dy <= 1; dy++) {
+		                    if (dx == 0 && dy == 0) continue;  // Skip the center cell, we know that this cell is the player's piece because of if statement above
 
-					}
-					if (counter == INROW - 1) {
-						return true;
-					}
-				}
-			}
-		}
+		                    // Check in the direction (dx, dy)
+		                    int count = 1;  // Start with the current cell
+		                    for (int k = 1; k < INROW; k++) {
+		                        int ni = i + dx * k;  // Calculate new row
+		                        int nj = j + dy * k;  // Calculate new column
+
+		                        // Break if out of bounds
+		                        if (isOutOfBounds(ni, nj)) {
+		                            break; 
+		                        }
+
+		                        // Check if the cell matches the player's piece
+		                        if (board[ni][nj] == player) {
+		                            count++;
+		                        } else {
+		                            break; 
+		                        }
+		                    }
+
+		                    // If we found INROW consecutive pieces, return true
+		                    if (count == INROW) {
+		                        return true;
+		                    }
+		                }
+		            }
+		        }
+		    }
+		  
 		return false;
+	}
+	
+	public boolean isOutOfBounds(int x, int y) {
+		return x < 0 || x >= board.length || y < 0 || y >= board[x].length;
 	}
 }

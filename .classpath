@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="Labb 4/src"/>
+	<classpathentry kind="src" path="Labb 5/src"/>
+	<classpathentry kind="src" path="Labb1/src"/>
+	<classpathentry kind="src" path="Labb2/src"/>
+	<classpathentry kind="src" path="Labb3/src"/>
+	<classpathentry kind="lib" path="Labb 4/Gomoku.jar"/>
+	<classpathentry kind="lib" path="Labb3/BFTmain.jar"/>
+	<classpathentry kind="lib" path="Labb3/FIFOmain.jar"/>
+	<classpathentry kind="output" path="Labb 4/bin"/>
+</classpath>
